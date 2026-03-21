@@ -1,0 +1,605 @@
+					<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>G Captchas - Validador IA</title>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '963147516358589');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=963147516358589&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f1f4f9;
+            -webkit-tap-highlight-color: transparent;
+            color: #202124;
+            overflow-y: scroll;
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: transparent;
+            position: relative;
+        }
+
+        /* Sistema de Tela Inteligente - Centraliza tudo automaticamente e protege o cabeçalho */
+        .screen {
+            display: none;
+            animation: slideUp 0.3s ease-out;
+            min-height: 100vh;
+            padding-top: 90px; /* Margem de segurança para o cabeçalho fixo */
+            padding-bottom: 30px;
+        }
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cartões Brancos com Sombra Google */
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid #e8eaed;
+            overflow: hidden;
+        }
+
+        /* Animação do Scanner */
+        .scanner-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #34a853; /* Verde Google */
+            box-shadow: 0 0 10px #34a853, 0 0 20px #34a853;
+            animation: scan 2s linear infinite;
+            z-index: 10;
+        }
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Image Container */
+        .task-image-wrapper {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: #e2e8f0;
+        }
+        .task-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Spinner Moderno */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 4px solid #e8eaed;
+            border-top-color: #34a853;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Erro Shake Animation */
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Novas Animações da Tela Principal */
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.6); transform: scale(1); }
+            70% { box-shadow: 0 0 0 15px rgba(52, 168, 83, 0); transform: scale(1.03); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 168, 83, 0); transform: scale(1); }
+        }
+        .btn-pulse {
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Estilo Google -->
+<div class="fixed top-0 left-0 w-full bg-white border-b border-gray-200 z-50 shadow-sm" id="main-header">
+    <div class="max-w-[480px] mx-auto flex justify-between items-center px-4 py-4">
+        <!-- Logo G Captchas SVG Oficial -->
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36px" height="36px">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                <path fill="none" d="M0 0h48v48H0z"/>
+            </svg>
+            <span class="font-medium text-gray-800 text-xl">Captchas</span>
+        </div>
+        
+        <!-- Saldo -->
+        <div class="bg-green-50 text-green-700 px-4 py-2 rounded-md font-bold border border-green-200 flex items-center gap-1 transition-transform text-lg" id="balance-pill">
+            R$ <span id="header-balance">100,00</span>
+        </div>
+    </div>
+</div>
+
+<div class="app-container">
+
+    <!-- TELA 1: Boas Vindas com o Bônus -->
+    <main id="screen-intro" class="screen active">
+        <!-- O 'my-auto' garante que este conteúdo fica sempre centrado verticalmente no ecrã disponível -->
+        <div class="my-auto w-full px-4">
+            <div class="card p-6 text-center border-t-4 border-t-[#34a853]">
+                
+                <!-- Ícone Flutuante Adicionado -->
+                <div class="flex justify-center mb-4 icon-float">
+                    <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-[#34a853]"></i>
+                    </div>
+                </div>
+
+                <h1 class="text-2xl font-bold text-gray-800 mb-3">Parabéns, você foi selecionado!</h1>
+                <p class="text-base text-gray-600 mb-6 leading-relaxed">
+                    Você acaba de receber acesso à nova ferramenta de Validação de Captchas. Aproveite, <b>você já ganhou R$ 100,00</b> de bônus inicial!
+                </p>
+
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 mb-8 text-left space-y-4">
+                    <p class="text-base font-bold text-gray-700 mb-2">Como fazer seu primeiro saque em minutos:</p>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 flex-shrink-0"></i>
+                        <span class="text-base text-gray-600">Confirme se as 3 imagens da Inteligência Artificial estão corretas.</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 flex-shrink-0"></i>
+                        <span class="text-base text-gray-600">Aumente o seu saldo para mais de R$ 1.800,00.</span>
+                    </div>
+                    <div class="flex items-center gap-3" id="step-device">
+                        <i data-lucide="circle-dashed" class="w-6 h-6 text-gray-400 flex-shrink-0"></i>
+                        <span class="text-base text-gray-600 font-medium">Cadastre seu PIX na próxima etapa.</span>
+                    </div>
+                </div>
+
+                <button onclick="startFunnel()" class="w-full bg-[#34a853] hover:bg-green-600 text-white font-bold py-5 rounded-lg text-xl flex justify-center items-center transition-colors btn-pulse">
+                    CLIQUE AQUI E COMECE!
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- TELA 2: Tela de Carregamento Genérica -->
+    <main id="screen-loading" class="screen">
+        <div class="my-auto w-full px-4 text-center">
+            <div class="loader mb-8"></div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-3" id="loading-title">Sincronizando...</h2>
+            <p class="text-base text-gray-500" id="loading-desc">Validando respostas e atualizando saldo.</p>
+        </div>
+    </main>
+
+    <!-- TELA 3: Tarefa Única -->
+    <main id="screen-task" class="screen">
+        <div class="my-auto w-full px-4">
+            <div class="text-center mb-6">
+                <span class="text-sm font-bold text-gray-500 uppercase tracking-widest" id="task-counter">ANÁLISE 1 DE 3</span>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+                    <div class="bg-[#34a853] h-2.5 rounded-full transition-all duration-500" id="task-progress" style="width: 33%"></div>
+                </div>
+                <p class="text-sm font-bold text-green-600 mt-3" id="task-reward-text">+ R$ 568,70 nesta análise</p>
+            </div>
+
+            <div class="card p-5" id="task-container">
+                <!-- Imagem e Scanner -->
+                <div class="task-image-wrapper mb-5 border border-gray-200">
+                    <div class="scanner-line"></div>
+                    <img decoding="async" id="task-image" src="" class="task-image" alt="Task">
+                </div>
+
+                <!-- Box da Pergunta -->
+                <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 text-center mb-5">
+                    <p class="text-sm text-gray-500 uppercase font-bold mb-2">O robô da I.A. classificou como:</p>
+                    <h2 class="text-3xl font-black text-[#4285f4] uppercase" id="task-label">CARRO</h2>
+                </div>
+
+                <p class="text-center text-base font-bold text-gray-700 mb-5">Esta classificação está correta?</p>
+
+                <!-- Alerta de Erro (Oculto por padrão) -->
+                <div id="error-alert" class="hidden bg-red-50 border border-red-200 text-red-600 text-base font-bold p-4 rounded-lg text-center mb-5 flex justify-center items-center gap-2 leading-tight">
+                    <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
+                    <span id="error-message">Atenção! A análise está incorreta. Tente novamente.</span>
+                </div>
+
+                <!-- Botões -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="submitAnswer(false)" class="bg-[#ea4335] hover:bg-red-600 text-white font-bold py-4 rounded-lg transition-colors active:scale-95 shadow-sm text-base">
+                        INCORRETO
+                    </button>
+                    <button onclick="submitAnswer(true)" class="bg-[#34a853] hover:bg-green-600 text-white font-bold py-4 rounded-lg transition-colors active:scale-95 shadow-sm text-base">
+                        ESTÁ CORRETO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- TELA 4: A Ponte (Bridge) -->
+    <main id="screen-bridge" class="screen">
+        <div class="my-auto w-full px-4">
+            <div class="card p-6 text-center border-t-4 border-t-[#4285f4]">
+                <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-5">
+                    <i data-lucide="shield-check" class="w-10 h-10 text-[#4285f4]"></i>
+                </div>
+                
+                <h1 class="text-2xl font-bold text-gray-800 mb-3">Análises Concluídas!</h1>
+                <p class="text-sm text-gray-500 font-bold uppercase tracking-widest mb-6">NÃO FECHE ESTA PÁGINA</p>
+                
+                <div class="bg-green-50 border border-green-200 rounded-lg p-5 mb-6">
+                    <p class="text-base text-gray-700">
+                        O seu saldo total validado de <strong class="text-green-700 text-xl">R$ 1.835,78</strong> está pronto para ser transferido.
+                    </p>
+                </div>
+
+                <div class="border border-yellow-200 bg-yellow-50 rounded-lg p-5 text-left mb-6">
+                    <h3 class="font-bold text-yellow-800 text-base mb-2 flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-5 h-5"></i> Etapa de Segurança
+                    </h3>
+                    <p class="text-sm text-yellow-700 leading-relaxed">
+                        Para evitar fraudes e liberar o seu PIX imediatamente, você precisa configurar o seu recebimento assistindo ao vídeo de instruções.
+                    </p>
+                </div>
+
+                <!-- Campo de Chave PIX adicionado -->
+                <div class="mb-6 text-left">
+                    <label for="pix-key" class="block text-base font-bold text-gray-800 mb-3">Qual sua chave PIX para recebimento?</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="key" class="w-5 h-5 text-gray-400"></i>
+                        </div>
+                        <input type="text" id="pix-key" class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4285f4] focus:border-transparent transition-all shadow-sm text-base" placeholder="CPF, Celular, E-mail ou Aleatória">
+                    </div>
+                </div>
+
+                <button onclick="submitPix()" class="w-full bg-[#4285f4] hover:bg-blue-600 text-white font-bold py-5 rounded-lg text-lg flex justify-center items-center gap-2 transition-all">
+                    CONFIGURAR MEU RECEBIMENTO <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- TELA 5: A VSL -->
+    <main id="screen-vsl" class="screen">
+        <div class="my-auto w-full px-4">
+            <div class="text-center mb-6">
+                <div class="flex justify-between text-[13px] font-bold text-gray-700 mb-2 px-4">
+                    <span>Assista até o final para receber seu saldo!</span>
+                    <span>100% concluído</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3 mb-5">
+                    <div class="bg-[#34a853] h-3 rounded-full w-full"></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6 text-center">
+                <h1 class="text-xl font-black text-gray-800 mb-3 leading-tight">FALTA POUCO PARA VOCÊ RESGATAR O SEU SALDO TOTAL OBTIDO NAS ANÁLISES...</h1>
+                <p class="text-base text-gray-600 mb-5">Assista o vídeo abaixo e entenda como sacar.</p>
+                
+                <div class="flex justify-center items-center gap-1 text-xs text-gray-400 mb-5 uppercase font-bold">
+                    <i data-lucide="volume-2" class="w-4 h-4"></i> Por favor, verifique se seu som está ligado.
+                </div>
+
+                <!-- Área do Vídeo (Cores do seu print original) -->
+                <div class="bg-[#3b4cca] aspect-video w-full rounded relative flex items-center justify-center text-white cursor-pointer" onclick="alert('Vídeo reproduzido aqui.')">
+                    <div class="text-center p-4">
+                        <h2 class="font-bold mb-4 text-lg">Você já começou a assistir esse vídeo</h2>
+                        <div class="flex flex-col sm:flex-row justify-center gap-3 text-sm font-medium">
+                            <div class="flex items-center justify-center gap-1.5 bg-white/10 px-5 py-3 rounded-full hover:bg-white/20">
+                                <i data-lucide="play-circle" class="w-5 h-5"></i> Continuar assistindo?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco de Retenção de Saldo (Estilo Print c6p) -->
+            <div class="bg-[#1e2630] rounded-lg p-6 text-white shadow-md relative overflow-hidden mb-8">
+                <div class="flex justify-between items-center text-xs text-gray-400 mb-5 uppercase tracking-wider font-bold">
+                    <span>SALDO BLOQUEADO</span>
+                    <i data-lucide="wallet" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-4xl font-black mb-8">R$ 1.835,78</h3>
+                
+                <div class="space-y-4 text-sm text-gray-400 font-medium">
+                    <div class="flex justify-between border-b border-gray-700 pb-3">
+                        <span>Beneficiário</span>
+                        <span class="text-white">CPF verificado</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-700 pb-3">
+                        <span>Instituição</span>
+                        <span class="text-white flex items-center gap-1.5"><i data-lucide="landmark" class="w-4 h-4"></i> Banco Central</span>
+                    </div>
+                    <div class="flex justify-between pb-1">
+                        <span>Status Atual</span>
+                        <span class="text-yellow-400 font-bold uppercase">Aguardando Taxa</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão VSL -->
+            <div>
+                <button class="w-full bg-[#10b981] hover:bg-[#059669] text-white font-bold py-5 rounded-lg flex justify-center items-center gap-2 shadow-md transition duration-200 text-lg" onclick="alert('Redireciona para o Checkout.')">
+                    <i data-lucide="unlock" class="w-6 h-6"></i>
+                    DESBLOQUEAR SALDO AGORA
+                </button>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+<script>
+    lucide.createIcons();
+
+    // Som de dinheiro/moeda atualizado para um servidor fiável que não bloqueia o áudio
+    const coinSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
+    coinSound.volume = 1.0;
+
+    // Som de Erro/Buzzer
+    const errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2570/2570-preview.mp3');
+    errorSound.volume = 0.8;
+
+    // Começamos exatamente com R$ 100,00 como no print C1D
+    let currentBalance = 100.00;
+    let currentTaskIndex = 0;
+
+    // Configuração exata das tarefas para bater os R$ 1.835,78 no final
+    const tasks = [
+        {
+            image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=400&fit=crop", 
+            label: "CARRO", // A IA "acertou"
+            correctAnswer: true, // Resposta correta do usuário: ESTÁ CORRETO
+            reward: 568.70, // Saldo vai para 668,70
+            progress: "33%"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=400&fit=crop", 
+            label: "GATO", // A IA "acertou"
+            correctAnswer: true, // Resposta correta: ESTÁ CORRETO
+            reward: 792.82, // Saldo vai para 1.461,52
+            progress: "66%"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop", // Foto de Pessoa
+            label: "ÁRVORE", // A IA "errou" de propósito para testar o humano
+            correctAnswer: false, // Resposta correta: INCORRETO
+            reward: 374.26, // Saldo vai para 1.835,78
+            progress: "95%"
+        }
+    ];
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function startFunnel() {
+        // TRUQUE ANTI-BLOQUEIO: Toca o áudio silenciosamente no 1º clique para o navegador permitir os próximos sons
+        coinSound.play().then(() => {
+            coinSound.pause();
+            coinSound.currentTime = 0;
+        }).catch(err => console.log("Áudio inicializado"));
+
+        errorSound.play().then(() => {
+            errorSound.pause();
+            errorSound.currentTime = 0;
+        }).catch(err => console.log("Áudio erro inicializado"));
+
+        document.getElementById('step-device').innerHTML = `<i data-lucide="check-circle-2" class="w-6 h-6 text-green-500 flex-shrink-0"></i><span class="text-base text-gray-600 font-medium">Cadastre seu PIX na próxima etapa.</span>`;
+        lucide.createIcons();
+
+        setTimeout(() => {
+            loadTask();
+        }, 600);
+    }
+
+    function formatMoney(amount) {
+        return amount.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    function updateBalance(amount) {
+        currentBalance += amount;
+        const balanceEl = document.getElementById('header-balance');
+        const pill = document.getElementById('balance-pill');
+        
+        balanceEl.innerText = formatMoney(currentBalance);
+        
+        pill.classList.replace('bg-green-50', 'bg-[#34a853]');
+        pill.classList.replace('text-green-700', 'text-white');
+        pill.classList.add('scale-110');
+        
+        setTimeout(() => {
+            pill.classList.replace('bg-[#34a853]', 'bg-green-50');
+            pill.classList.replace('text-white', 'text-green-700');
+            pill.classList.remove('scale-110');
+        }, 500);
+    }
+
+    function loadTask() {
+        if (currentTaskIndex >= tasks.length) {
+            finishTasks();
+            return;
+        }
+
+        const task = tasks[currentTaskIndex];
+        
+        // Tela Loading
+        showScreen('screen-loading');
+        document.getElementById('loading-title').innerText = "Carregando Análise...";
+        document.getElementById('loading-desc').innerText = `Preparando imagem ${currentTaskIndex + 1} de 3...`;
+
+        // Resetar Alertas
+        document.getElementById('error-alert').classList.add('hidden');
+        document.getElementById('task-container').classList.remove('shake');
+
+        setTimeout(() => {
+            document.getElementById('task-image').src = task.image;
+            
+            // Fallback de imagem
+            document.getElementById('task-image').onerror = function() {
+                this.src = `https://placehold.co/400x400/e2e8f0/64748b?text=Imagem+Carregada`;
+            };
+
+            document.getElementById('task-label').innerText = task.label;
+            document.getElementById('task-counter').innerText = `ANÁLISE ${currentTaskIndex + 1} DE 3`;
+            document.getElementById('task-progress').style.width = task.progress;
+            document.getElementById('task-reward-text').innerText = `+ R$ ${formatMoney(task.reward)} nesta análise`;
+            
+            showScreen('screen-task');
+        }, 800);
+    }
+
+    function submitAnswer(userChoice) {
+        const task = tasks[currentTaskIndex];
+        const taskContainer = document.getElementById('task-container');
+        const errorAlert = document.getElementById('error-alert');
+        
+        // LÓGICA DE VALIDAÇÃO: Se clicar errado, não avança.
+        if (userChoice !== task.correctAnswer) {
+            // Toca o som de erro
+            try {
+                errorSound.currentTime = 0; 
+                let playPromise = errorSound.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => console.log("Aguardando interação para áudio de erro."));
+                }
+            } catch(e) {}
+
+            // Vibra a tela e mostra o erro
+            taskContainer.classList.remove('shake');
+            void taskContainer.offsetWidth; // Reflow
+            taskContainer.classList.add('shake');
+            
+            errorAlert.classList.remove('hidden');
+            
+            if (task.correctAnswer === true) {
+                document.getElementById('error-message').innerText = `Incorreto! A imagem realmente é um ${task.label}. Clique em ESTÁ CORRETO.`;
+            } else {
+                document.getElementById('error-message').innerText = `Incorreto! A imagem não é um ${task.label}. Clique em INCORRETO.`;
+            }
+            return; // Bloqueia o avanço
+        }
+        
+        // Se acertou, esconde o erro e avança
+        errorAlert.classList.add('hidden');
+        
+        showScreen('screen-loading');
+        document.getElementById('loading-title').innerText = "Sincronizando...";
+        document.getElementById('loading-desc').innerText = "Validando resposta e atualizando saldo.";
+
+        setTimeout(() => {
+            document.getElementById('loading-title').innerText = `+ R$ ${formatMoney(task.reward)}`;
+            document.getElementById('loading-title').classList.replace('text-gray-800', 'text-[#34a853]');
+            document.getElementById('loading-desc').innerText = "Análise correta! Saldo adicionado.";
+            
+            // Toca o som de moeda de forma segura
+            try {
+                coinSound.currentTime = 0; 
+                let playPromise = coinSound.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => console.log("Aguardando interação para áudio."));
+                }
+            } catch(e) {}
+            
+            updateBalance(task.reward);
+            currentTaskIndex++;
+
+            setTimeout(() => {
+                document.getElementById('loading-title').classList.replace('text-[#34a853]', 'text-gray-800');
+                loadTask();
+            }, 1500);
+
+        }, 1200);
+    }
+
+    function finishTasks() {
+        showScreen('screen-loading');
+        document.getElementById('loading-title').innerText = "Finalizando Teste...";
+        document.getElementById('loading-desc').innerText = "Gerando seu perfil de acesso no sistema.";
+
+        setTimeout(() => {
+            showScreen('screen-bridge');
+            lucide.createIcons(); // Garante que o ícone da chave PIX seja renderizado
+        }, 1500);
+    }
+
+    // Nova função para validar o PIX e redirecionar
+    function submitPix() {
+        const pixInput = document.getElementById('pix-key').value;
+        
+        if (pixInput.trim() === '') {
+            // Se o campo estiver vazio, pisca a borda de vermelho e alerta
+            const inputElement = document.getElementById('pix-key');
+            inputElement.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+            setTimeout(() => {
+                inputElement.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+            }, 2000);
+            
+            alert('Por favor, digite sua chave PIX antes de configurar o recebimento!');
+            return;
+        }
+        
+        // Redireciona para o site da VSL externa solicitada
+        window.location.href = 'page2/index.html';
+    }
+
+    function goToVSL() {
+        showScreen('screen-vsl');
+        document.getElementById('main-header').classList.add('hidden'); 
+    }
+</script>
+
+</body>
+</html>				</div>
