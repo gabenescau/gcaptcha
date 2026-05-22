@@ -219,31 +219,31 @@
 
 <body class="pb-44 md:pb-10 relative overflow-x-hidden selection:bg-green-200 text-slate-800 bg-[#F0F2F5]">
 
-    <!-- Progress Bar (No Topo da Página) -->
-    <div class="w-full bg-white py-3 shadow-sm border-b border-gray-200 mb-6">
-        <div class="progress-wrapper !mt-0 !mb-0">
-            <div
-                style="display: flex; justify-content: space-between; margin-bottom: 5px; color: #555; font-size: 13px; font-weight: bold;">
-                <span>Assista até o final para receber seu saldo!</span>
-                <span id="text-percent">0%</span>
-            </div>
-            <div class="progress-track">
-                <div class="progress-fill" id="my-progress-bar"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- MAIN CARD WRAPPER -->
-    <div class="max-w-[1024px] mx-auto px-4 md:px-0 mb-8 w-full">
+    <div class="max-w-[1024px] mx-auto px-4 md:px-0 mb-8 w-full mt-6">
 
-        <!-- CARD HEADER (Logo & Saldo) -->
-        <div class="bg-white rounded-[20px] shadow-sm border border-gray-100 p-5 md:px-8 md:py-6 mb-6 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
-            <div class="w-full md:w-auto flex justify-center md:justify-start">
+        <!-- CARD HEADER (Logo, Progress & Saldo) -->
+        <div class="bg-white rounded-[20px] shadow-sm border border-gray-100 p-5 md:px-8 md:py-6 mb-6 flex flex-col items-center justify-center gap-6">
+            <!-- Logo no topo -->
+            <div class="w-full flex justify-center mb-2">
                 <img fetchpriority="high" decoding="async" width="220"
                     src="https://agoranovo.site/wp-content/uploads/2025/09/Google-Captchas2.png"
                     alt="Google Captchas" />
             </div>
-            <div class="flex items-center gap-4">
+            
+            <!-- Progress Bar -->
+            <div class="w-full md:w-3/4 progress-wrapper !mt-0 !mb-0">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; color: #555; font-size: 13px; font-weight: bold;">
+                    <span>Assista até o final para receber seu saldo!</span>
+                    <span id="text-percent">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="my-progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- Saldo -->
+            <div class="flex items-center justify-center gap-4 mt-2">
                 <span class="text-sm md:text-base font-semibold text-gray-600">Seu saldo atual:</span>
                 <div class="bg-[#2e924d] text-white font-extrabold text-xl md:text-2xl py-2 px-5 rounded-lg shadow-sm">
                     R$ 1.835,78
